@@ -26,13 +26,15 @@ class Transaction {
     this.account = account;
   }
   commit() {
-    this.time = new Date();
+    if (this instanceof Withdrawal && this.account.balance < this.amount) {
+      console.log('Sarry, yous bees too broked!');
+      return;
+    }
 
+    this.time = new Date();
     this.account.addTransaction(this);
     // this.account.balance += this.value;
   }
-
-
 }
 
 class Deposit extends Transaction {
@@ -59,8 +61,12 @@ const myAccount = new Account('snow-patrol');
 const t1 = new Deposit(50, myAccount);
 t1.commit();
 
-const t2 = new Withdrawal(10, myAccount);
+const t2 = new Withdrawal(20, myAccount);
 t2.commit();
+
+const t3 = new Withdrawal(31, myAccount);
+t3.commit();
+
 
 console.log(myAccount);
 console.log('Balance is: $', myAccount.balance);
